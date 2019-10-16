@@ -40,7 +40,26 @@
 						</header>
 						<div class="video">
 							<div class="video-wrapper">
-								<iframe width="560" height="315" src="https://www.youtube.com/embed/s6zR2T9vn2c" frameborder="0" allowfullscreen></iframe>
+								<iframe width="560" height="315" frameborder="0" allowfullscreen></iframe>
+								<script src="http://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+									<video width="640" id="video" controls="" autoplay=""></video>
+									<script>
+										var video = document.getElementById('video');
+										if(Hls.isSupported()) {
+											var hls = new Hls();
+											hls.loadSource('http://192.168.42.58:1935/live/ghoststream/playlist.m3u8');
+											hls.attachMedia(video);
+											hls.on(Hls.Events.MANIFEST_PARSED,function() {
+												video.play();
+											});
+										}
+											else if (video.canPlayType('application/vnd.apple.mpegurl')){
+												video.src = 'http://192.168.42.58:1935/live/ghoststream/playlist.m3u8';
+												video.addEventListener('loadedmetadata', function(){
+													video.play();
+												});
+										}
+									</script>
 							</div>
 							<p class="caption">
 								In luctus nunc nec lacus condimentum maximus. Nunc vestibulum urna a arcu dignissim, nec aliquam ultrices ac massa eget placerat.
